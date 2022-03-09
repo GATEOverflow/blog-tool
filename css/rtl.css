@@ -1,0 +1,52 @@
+/*Style sheet for right to left language websites */
+.qa-template-blog .qa-q-view-stats {
+    float: left;
+}
+
+.qa-template-blogs .qa-q-item-stats {
+    float: left;
+}
+
+.qa-template-blog .qa-view-count {
+    right: 0;
+    top: -20px;
+    float: none;
+    margin: 0;
+    padding: 0 0 2px;
+    width: auto;
+    height: auto;
+    color: #777;
+    border: none;
+    border-bottom: 1px solid #ddd
+}
+
+.qa-template-blog .qa-view-count-data {
+    font-size: 11px;
+    line-height: 12px;
+    margin-top: 1px;
+    display: inline;
+}
+
+.qa-template-blog .qa-view-count-pad {
+    font-size: 8px;
+    line-height: 8px;
+    letter-spacing: 1px;
+}
+
+@media only screen and (min-width: 768px) {
+    .qa-template-blogs.grid .qa-q-list-item {
+        float: right !important;
+    }
+}
+
+.read-more-btn {
+    float: right;
+}
+
+.qa-template-blogs .qa-q-item-stats {
+    float: left;
+}
+
+.qa-template-blogs .qa-view-count {
+    float: right;
+}

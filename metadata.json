@@ -1,0 +1,10 @@
+{
+	"name": "Q2A Blog Tool",
+	"description": "Ultimate Blogging Tool for Question2Answer websites",
+	"version": "1.6.0",
+	"date": "2018-08-31",
+	"author": "Q2A-Store",
+	"author_uri": "http://www.q2a-store.com/",
+	"license": "GPLv2",
+	"min_q2a": "1.6.3",
+}
