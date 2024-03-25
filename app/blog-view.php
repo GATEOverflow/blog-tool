@@ -748,7 +748,7 @@
                     qa_set_up_name_field( $qa_content, $form[ 'fields' ], @$in[ 'name' ], $prefix );
 
                 qas_blog_set_up_notify_fields( $qa_content, $form[ 'fields' ], 'C', qa_get_logged_in_email(),
-                    isset( $in[ 'notify' ] ) ? $in[ 'notify' ] : qa_opt( 'notify_users_default' ), $in[ 'email' ], @$errors[ 'email' ], $prefix );
+                    isset( $in[ 'notify' ] ) ? $in[ 'notify' ] : qa_opt( 'notify_users_default' ), @$in[ 'email' ], @$errors[ 'email' ], $prefix );
 
                 $onloads = array();
 

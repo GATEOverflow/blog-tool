@@ -415,7 +415,9 @@
 
         $result = qa_db_query_sub( $query, $postid );
 
-        return qa_db_read_one_assoc( $result, true );
+	$myreturn  = qa_db_read_one_assoc( $result, true );
+	if(!$myreturn) return array();
+	else return $myreturn;
     }
 
     /**
@@ -431,7 +433,9 @@
 
         $result = qa_db_query_sub( $query, $postid );
 
-        return qa_db_read_one_assoc( $result, true );
+        $myreturn = qa_db_read_one_assoc( $result, true );
+	if(!$myreturn) return array();
+	else return $myreturn;
     }
 
     function qas_blog_db_get_comment_reply_ids( $commentid ){

@@ -211,6 +211,7 @@ $qa_content['html_tags'] .= ' itemscope itemtype="https://schema.org/Blog"';
     }
 
     $qa_content[ 'q_view' ][ 'c_list' ] = qas_blog_page_b_comment_follow_list( $post, $post, $commentsfollows,
+        //true, $usershtml, $formrequested, $formpostid ); // ...for viewing //arjun fix for partial hide
         $commentsall == $postid, $usershtml, $formrequested, $formpostid ); // ...for viewing
 
     if ( qa_opt( 'qas_blog_show_comment_count' ) ) {
@@ -227,6 +228,9 @@ $qa_content['html_tags'] .= ' itemscope itemtype="https://schema.org/Blog"';
 
     $pagesize = qa_opt( 'qas_blog_page_size_ps' );
     $countfortitle = 0;
+
+
+
     // set the canonical url based on possible pagination
 
     $qa_content[ 'canonical' ] = qa_path_html( qas_blog_request( $post[ 'postid' ], $post[ 'title' ] ),

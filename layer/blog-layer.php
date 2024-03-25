@@ -314,7 +314,7 @@
 
         public function c_list_items( $c_items )
         {
-            if( qas_is_blog_page( $this->template ) && qa_opt('qas_blog_allow_nested_cmnts')) {
+            if( qas_is_blog_page( $this->template ) && qa_opt('qas_blog_allow_nested_cmnts') && false) { //arjun
                 //only for blog pages show nested comments
                 foreach ( $c_items as $c_id => &$c_item ) {
                     //don't show the replies as a parent item
@@ -330,7 +330,7 @@
 
         public function c_list_reply_items( &$c_items, $c_item, $level = 1 )
         {
-            if(!isset($c_item['raw']))
+            if(!$c_items || !isset($c_item['raw']))
                 return ;
 
             //find if it has any replies or not

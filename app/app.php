@@ -36,13 +36,13 @@
     {
 
         if ( ( ( $showtype == 'B' ) || ( $showtype == 'C' ) ) && isset( $showid ) ) {
-            $params = array( 'show' => $showid ); // due to pagination
+            $params = array( 'show' => $showid); // due to pagination
             $anchor = qa_anchor( $showtype, $showid );
 
         } else {
             $params = null;
             $anchor = null;
-        }
+	}
 
         return qa_path( qas_blog_request( $postid, $title ), $params, $absolute ? qa_opt( 'site_url' ) : null, null, $anchor );
     }
