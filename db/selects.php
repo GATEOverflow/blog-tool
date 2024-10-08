@@ -451,7 +451,7 @@
         $selectspec[ 'source' ] .= " JOIN (SELECT postid FROM ^blogs WHERE " .
             qas_blog_db_categoryslugs_sql_args( $categoryslugs, $selectspec[ 'arguments' ] ) .
             ( isset( $createip ) ? "createip=INET6_ATON($) AND " : "" ) .
-            "type=$ " . $sortsql . " LIMIT #,#) y ON ^blogs.postid=y.postid";
+            "closedbyid is  null and ". "type=$ " . $sortsql . " LIMIT #,#) y ON ^blogs.postid=y.postid";//arjun
 
         if ( isset( $createip ) )
             $selectspec[ 'arguments' ][] = $createip;

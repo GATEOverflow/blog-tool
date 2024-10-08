@@ -24,6 +24,7 @@
                     break;
 
                 case 'qas_blog_c_post':
+                    //break; //arjun turnoff notification from now
                     $parent = $params[ 'parent' ];
                     $post = $params[ 'question' ];
 
@@ -70,6 +71,12 @@
                         if ( isset( $comment[ 'notify' ] ) && !qa_post_is_by_user( $comment, $userid, $cookieid ) ) {
                             $senduserid = $comment[ 'userid' ];
                             $sendemail = @$comment[ 'notify' ];
+
+			    $twoWeeksAgo = strtotime('-2 weeks');
+
+			    if ($comment['created'] < $twoWeeksAgo) {
+    				continue;//arjun
+			    }
 
                             if ( qa_email_validate( $sendemail ) ) {
                                 if ( @$senttoemail[ $sendemail ] )
