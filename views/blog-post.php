@@ -118,7 +118,7 @@
     $jumptoanchor = null;
     $commentsall = null;
 
-    if ( substr( $pagestate, 0, 13 ) == 'showcomments-' ) {
+	if ( is_string($pagestate) && substr($pagestate, 0, 13) === 'showcomments-' ) {
         $commentsall = substr( $pagestate, 13 );
         $pagestate = null;
 
@@ -130,7 +130,7 @@
             }
     }
 
-    if ( qa_is_http_post() || strlen( $pagestate ) )
+    if ( qa_is_http_post() || (is_string($pagestate) && strlen( $pagestate ) ))
         require QAS_BLOG_DIR . '/app/blog-actions.php';
 
     $formrequested = isset( $formtype );
@@ -180,7 +180,7 @@ $qa_content['html_tags'] .= ' itemscope itemtype="https://schema.org/Blog"';
         $categorykeyword = @$categories[ $post[ 'categoryid' ] ][ 'title' ];
 
         $qa_content[ 'keywords' ] = qa_html( implode( ',', array_merge(
-            ( qas_blog_using_categories() && strlen( $categorykeyword ) ) ? array( $categorykeyword ) : array(),
+            ( qas_blog_using_categories() && is_string($categorykeyword) && strlen( $categorykeyword ) ) ? array( $categorykeyword ) : array(),
             qa_tagstring_to_tags( $post[ 'tags' ] )
         ) ) ); // as far as I know, META keywords have zero effect on search rankings or listings, but many people have asked for this
     }

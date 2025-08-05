@@ -70,6 +70,7 @@
         'publish_post_popup'            => 'Publish this post',
         'this_will_be_draft'            => 'This post will not be published . You could publish this later ',
         'nav_featured'                  => 'Featured Posts',
+		'nav_favorites'                  => 'Favorite Posts',
         'featured_button'               => 'Featured',
         'featured_post_popup'           => 'Set this post as featured',
         'unfeatured_button'             => 'Un-feature',
@@ -94,8 +95,11 @@
         'next_post'                     => 'Next post &gt;&gt; ',
         'prev_post'                     => 'Prev post &gt;&gt; ',
         'replied'                       => 'replied',
-        'recent_cs_in_x' => 'Recently commented posts in ^',
-        'recent_cs_title' => 'Recently commented posts',
+        'recent_cs_in_x' 				=> 'Recently commented posts in ^',
+        'recent_cs_title' 				=> 'Recently commented posts',
+		'favorite_posts_title' 			=> 'Your Favorite Blog Posts',
+		'no_favorite_posts_found' 		=> 'You have not favorited any posts yet.',
+
     );
 
 

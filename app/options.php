@@ -353,7 +353,7 @@
         $sort = '';
         if ( qas_is_featured_posts_enabled() ) {
             $default_sort = qa_opt( 'qas_blog_default_home' );
-            $allowed_sort = array( 'featured', 'views', 'recent' );
+            $allowed_sort = array( 'featured', 'views', 'recent', 'favorites' );
             if ( in_array( $default_sort, $allowed_sort ) )
                 $sort = $default_sort;
         }

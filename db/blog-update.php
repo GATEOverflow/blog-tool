@@ -333,6 +333,18 @@
         return qa_db_read_all_assoc( qa_db_query_sub( 'SELECT postid from ^blog_postmetas where title = # ', 'featured_post' ) );
     }
 
+
+    /**
+     * fetch all favorite post ids fom database
+     *
+     * @return array
+     */
+    function qas_blog_get_all_favorite_post_ids($userid)
+    {
+		return qa_db_read_all_assoc( qa_db_query_sub( 'SELECT entityid from ^userfavorites where entitytype = # and userid = #', 'P', $userid ) );
+    }
+
+
     /**
      * fetch count of all featured post counts fom database
      *

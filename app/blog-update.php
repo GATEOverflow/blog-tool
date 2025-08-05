@@ -29,7 +29,7 @@
      * @param bool $remoderate
      * @param bool $silent
      */
-    function qas_blog_b_post_set_content( $oldpost, $title, $content, $format, $text, $tagstring, $notify, $userid, $handle, $cookieid, $extravalue = null, $name = null, $remoderate = false, $silent = false, $categoryid, $is_draft = false )
+    function qas_blog_b_post_set_content( $oldpost, $title, $content, $format, $text, $tagstring, $notify, $userid, $handle, $cookieid, $extravalue = null, $name = null, $remoderate = false, $silent = false, $categoryid = null, $is_draft = false )
     {
         qas_blog_post_unindex( $oldpost[ 'postid' ] );
         $wasqueued = ( $oldpost[ 'type' ] == 'B_QUEUED' );
