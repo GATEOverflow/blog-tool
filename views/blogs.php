@@ -32,6 +32,10 @@
         case 'views':
             $selectsort = 'views';
             break;
+			
+		case 'favorites':
+			$selectsort = 'created';
+			break;
 
         default:
             $selectsort = 'created';
@@ -39,8 +43,6 @@
     }
 
     $featured_page = ( $sort === 'featured' && qas_is_featured_posts_enabled() && !$countslugs );
-
-
     if ( $featured_page ) {
         $featured_post_ids = qas_blog_get_all_featured_post_ids();
         $featured_post_count = count( $featured_post_ids );
@@ -50,9 +52,21 @@
             $featred_select_spec = null;
         }
     }
+	
+	$favorites_page = ( $sort === 'favorites' && !$countslugs );
+	if ( $favorites_page ) {
+    $favorite_post_ids = qas_blog_get_all_favorite_post_ids($userid);
+    $favorite_post_count = count( $favorite_post_ids );
+    if ( $favorite_post_count ) {
+        $favorite_select_spec = qas_blog_db_featured_posts_selectspec( $favorite_post_ids, qa_opt_if_loaded( 'qas_blog_page_size_ps' ), $start );
+    } else {
+        $favorite_select_spec = null;
+    }
+}
+
 
     list( $posts, $categories, $categoryid ) = qa_db_select_with_pending(
-        $featured_page ? $featred_select_spec : qas_blog_db_blogs_selectspec( $userid, $selectsort, $start, $categoryslugs, null, false, true, qa_opt_if_loaded( 'qas_blog_page_size_ps' ) ),
+        $featured_page ? $featred_select_spec : ($favorites_page ? $favorite_select_spec : qas_blog_db_blogs_selectspec( $userid, $selectsort, $start, $categoryslugs, null, false, true, qa_opt_if_loaded( 'qas_blog_page_size_ps' )) ),
         qas_blog_db_category_nav_selectspec( $categoryslugs, false, false, true ),
         $countslugs ? qas_blog_db_slugs_to_category_id_selectspec( $categoryslugs ) : null
     );
@@ -77,6 +91,10 @@
                 $sometitle = $countslugs ? qa_lang_html_sub( 'qas_blog/recent_posts_in_x', $categorytitlehtml ) : qa_lang_html( 'qas_blog/recent_posts_title' );
 
             break;
+		case 'favorites':
+			$sometitle = qa_lang_html('qas_blog/favorite_posts_title'); 
+			$nonetitle = qa_lang_html('qas_blog/no_favorite_posts_found');
+			break;
 
         case 'views':
             $sometitle = $countslugs ? qa_lang_html_sub( 'qas_blog/viewed_posts_in_x', $categorytitlehtml ) : qa_lang_html( 'qas_blog/viewed_posts_title' );
@@ -117,7 +135,19 @@
     $feedpathprefix = null;
     $linkparams = array( 'sort' => $sort );
 
-    $total_count = $featured_page ? $featured_post_count : ( $countslugs ? $categories[ $categoryid ][ 'qcount' ] : qa_opt( 'cache_blog_pcount' ) );
+    //$total_count = $featured_page ? $featured_post_count : ( $countslugs ? $categories[ $categoryid ][ 'qcount' ] : qa_opt( 'cache_blog_pcount' ) );
+
+	$total_count = $featured_page
+    ? $featured_post_count
+    : ( $favorites_page
+        ? $favorite_post_count
+        : ( $countslugs
+            ? $categories[ $categoryid ][ 'qcount' ]
+            : qa_opt( 'cache_blog_pcount' )
+        )
+    );
+
+
 
 //	Prepare and return content for theme
 
@@ -142,7 +172,7 @@
         $qa_content[ 'navigation' ][ 'sub' ] = qas_blogs_sub_navigation( $sort, $categoryslugs );
 
     //check and add the list layout information
-    if ( $featured_page && qas_is_grid_view_enabled() && !$countslugs )
+    if ( ($featured_page  || $favorites_page) && qas_is_grid_view_enabled() && !$countslugs )
         $qa_content[ 'grid_view' ] = true;
     else
         $qa_content[ 'grid_view' ] = false;

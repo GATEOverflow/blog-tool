@@ -387,7 +387,7 @@
 
         //	Extra value display
 
-        if ( strlen( @$post[ 'extra' ] ) && qa_opt( 'qas_blog_extra_field_active' ) && qa_opt( 'qas_blog_extra_field_display' ) )
+        if ( is_string(@$post[ 'extra' ]) && strlen( @$post[ 'extra' ] ) && qa_opt( 'qas_blog_extra_field_active' ) && qa_opt( 'qas_blog_extra_field_display' ) )
             $q_view[ 'extra' ] = array(
                 'label'   => qa_html( qa_opt( 'qas_blog_extra_field_label' ) ),
                 'content' => qa_html( qa_block_words_replace( $post[ 'extra' ], qa_get_block_words_preg() ) ),
@@ -741,7 +741,7 @@
                     ),
                 );
 
-                if ( !strlen( $custom ) )
+                if ( is_string($custom) && !strlen( $custom ) )
                     unset( $form[ 'fields' ][ 'custom' ] );
 
                 if ( !qa_is_logged_in() )
@@ -755,7 +755,7 @@
                 if ( $captchareason ) {
                     $captchaloadscript = qa_set_up_captcha_field( $qa_content, $form[ 'fields' ], $errors, qa_captcha_reason_note( $captchareason ) );
 
-                    if ( strlen( $captchaloadscript ) )
+                    if ( is_string($captchaloadscript) && strlen( $captchaloadscript ) )
                         $onloads[] = 'document.getElementById(' . qa_js( $formid ) . ').qa_show=function() { ' . $captchaloadscript . ' };';
                 }
 

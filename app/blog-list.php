@@ -139,6 +139,10 @@
                 'label' => qa_lang( 'main/nav_most_views' ),
                 'url'   => qa_path_html( $request, array( 'sort' => 'views' ) ),
             ),
+			'favorites'    => array(
+                'label' => qa_lang( 'qas_blog/nav_favorites' ),
+                'url'   => qa_path_html( $request, array( 'sort' => 'favorites' ) ),
+            ),
         );
 
         if ( isset( $navigation[ $sort ] ) )
