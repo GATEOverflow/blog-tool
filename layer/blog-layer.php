@@ -237,7 +237,7 @@
             }
         }
 
-        public function body_tags()
+        public function body_tags_off()
         {
             $class = 'qa-template-' . qa_html( $this->template );
 
