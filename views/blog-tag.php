@@ -57,6 +57,9 @@
     foreach ( $posts as $postid => $post )
         $qa_content[ 'q_list' ][ 'qs' ][] = qas_blog_post_html_fields( $post, $userid, qa_cookie_get(), $usershtml, null, qas_blog_post_html_options( $post ) );
 
+    $qa_content['description'] = qa_html(qa_opt('site_title') . ' - ' . qa_lang_sub('qas_blog/posts_tagged_x', $tag));
+    $qa_content['canonical'] = qa_path_html(qa_request(), $start > 0 ? array('start' => $start) : null, qa_opt('site_url'));
+
     $qa_content[ 'page_links' ] = qa_html_page_links( qa_request(), $start, $pagesize, $tagword[ 'tagcount' ], qa_opt( 'pages_prev_next' ) );
 
     if ( empty( $qa_content[ 'page_links' ] ) )

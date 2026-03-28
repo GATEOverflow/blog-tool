@@ -55,6 +55,9 @@
             $usershtml, null, qas_blog_post_html_options( $post, $htmldefaults ) );
     }
 
+    $qa_content['description'] = qa_html(qa_opt('site_title') . ' - ' . qa_lang_sub('qas_blog/posts_by_x', $handle));
+    $qa_content['canonical'] = qa_path_html(qa_request(), $start > 0 ? array('start' => $start) : null, qa_opt('site_url'));
+
     $qa_content[ 'page_links' ] = qa_html_page_links( qa_request(), $start, $pagesize, $count, qa_opt( 'pages_prev_next' ) );
 
 

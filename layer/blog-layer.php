@@ -87,6 +87,108 @@
 
         }
 
+        /**
+         * Output Open Graph, Twitter Card and JSON-LD meta tags for blog pages
+         */
+        public function head_custom()
+        {
+            parent::head_custom();
+
+            if (!qas_is_blog_page($this->template))
+                return;
+
+            $site_name = qa_html(qa_opt('site_title'));
+            $content = $this->content;
+
+            if ($this->template == 'blog' && isset($content['q_view']['raw'])) {
+                // Single blog post page
+                $post = $content['q_view']['raw'];
+                $title = qa_html(isset($post['title']) ? $post['title'] : '');
+                $description = isset($content['description']) ? $content['description'] : '';
+                if (!strlen($description) && isset($post['content'])) {
+                    $description = qa_html(qa_shorten_string_line(qa_viewer_text($post['content'], $post['format']), 160));
+                }
+                $url = isset($content['canonical']) ? $content['canonical'] : qa_self_html();
+
+                // Extract first image for og:image
+                $image = '';
+                if (isset($post['content'])) {
+                    $img = qas_blog_get_image_from_post($post['content']);
+                    if ($img) {
+                        $image = (strpos($img, 'http') === 0) ? $img : qa_opt('site_url') . ltrim($img, '/');
+                    }
+                }
+
+                $author = '';
+                if (isset($post['handle']))
+                    $author = qa_html($post['handle']);
+
+                // Open Graph
+                $this->output('<meta property="og:type" content="article"/>');
+                $this->output('<meta property="og:title" content="' . $title . '"/>');
+                $this->output('<meta property="og:description" content="' . $description . '"/>');
+                $this->output('<meta property="og:url" content="' . $url . '"/>');
+                $this->output('<meta property="og:site_name" content="' . $site_name . '"/>');
+                if (strlen($image))
+                    $this->output('<meta property="og:image" content="' . qa_html($image) . '"/>');
+                if (isset($post['created']))
+                    $this->output('<meta property="article:published_time" content="' . qa_html(gmdate('c', $post['created'])) . '"/>');
+                if (strlen($author))
+                    $this->output('<meta property="article:author" content="' . $author . '"/>');
+
+                // Twitter Card
+                $this->output('<meta name="twitter:card" content="' . (strlen($image) ? 'summary_large_image' : 'summary') . '"/>');
+                $this->output('<meta name="twitter:title" content="' . $title . '"/>');
+                $this->output('<meta name="twitter:description" content="' . $description . '"/>');
+                if (strlen($image))
+                    $this->output('<meta name="twitter:image" content="' . qa_html($image) . '"/>');
+
+                // JSON-LD structured data
+                $jsonld = array(
+                    '@context' => 'https://schema.org',
+                    '@type' => 'BlogPosting',
+                    'headline' => isset($post['title']) ? $post['title'] : '',
+                    'description' => strip_tags($description),
+                    'url' => html_entity_decode($url),
+                    'mainEntityOfPage' => array('@type' => 'WebPage', '@id' => html_entity_decode($url)),
+                );
+                if (strlen($image))
+                    $jsonld['image'] = $image;
+                if (isset($post['created']))
+                    $jsonld['datePublished'] = gmdate('c', $post['created']);
+                if (strlen($author)) {
+                    $jsonld['author'] = array('@type' => 'Person', 'name' => $post['handle']);
+                }
+                $jsonld['publisher'] = array(
+                    '@type' => 'Organization',
+                    'name' => qa_opt('site_title'),
+                );
+
+                $this->output('<script type="application/ld+json">' . json_encode($jsonld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>');
+
+            } else {
+                // Blog listing pages (blogs, tag, category, user posts, search)
+                $title = isset($content['title']) ? strip_tags($content['title']) : $site_name;
+                $description = qa_html(qa_opt('site_title') . ' - ' . strip_tags($title));
+                $url = qa_self_html();
+
+                $this->output('<meta property="og:type" content="website"/>');
+                $this->output('<meta property="og:title" content="' . qa_html($title) . '"/>');
+                $this->output('<meta property="og:description" content="' . $description . '"/>');
+                $this->output('<meta property="og:url" content="' . $url . '"/>');
+                $this->output('<meta property="og:site_name" content="' . $site_name . '"/>');
+
+                $this->output('<meta name="twitter:card" content="summary"/>');
+                $this->output('<meta name="twitter:title" content="' . qa_html($title) . '"/>');
+                $this->output('<meta name="twitter:description" content="' . $description . '"/>');
+
+                // Add meta description for listing pages if not already set
+                if (empty($content['description'])) {
+                    $this->output('<meta name="description" content="' . $description . '"/>');
+                }
+            }
+        }
+
         public function q_view_content( $q_view )
         {
             if ( $this->template == 'blog' && qa_opt( 'site_theme' ) === 'Snow' )

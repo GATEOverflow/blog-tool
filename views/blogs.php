@@ -168,6 +168,9 @@
         $linkparams // category nav params
     );
 
+    $qa_content['description'] = qa_html(qa_opt('site_title') . ' - ' . strip_tags($sometitle));
+    $qa_content['canonical'] = qa_path_html(qa_request(), $start > 0 ? array('start' => $start) : null, qa_opt('site_url'));
+
     if ( QA_ALLOW_UNINDEXED_QUERIES || !$countslugs )
         $qa_content[ 'navigation' ][ 'sub' ] = qas_blogs_sub_navigation( $sort, $categoryslugs );
 
