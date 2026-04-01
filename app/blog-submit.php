@@ -895,6 +895,91 @@
     }
 
 
+    /**
+     * Convert a blog post and its comments into a Q2A question with answers.
+     * Returns the new question ID on success, or false on failure.
+     *
+     * @param array $post Blog post database record (full)
+     * @param array $commentsfollows Blog comments on this post
+     * @param int $userid Current user ID
+     * @param string $handle Current user handle
+     * @param string $cookieid Current cookie ID
+     *
+     * @return int|false New question ID or false
+     */
+    function qas_blog_convert_to_question( $post, $commentsfollows, $userid, $handle, $cookieid )
+    {
+        require_once QA_INCLUDE_DIR . 'app/post-create.php';
+
+        // Create the Q2A question from the blog post
+        $questionid = qa_question_create(
+            null, // no follow-on answer
+            $post[ 'userid' ],
+            isset( $post[ 'handle' ] ) ? $post[ 'handle' ] : $handle,
+            $post[ 'userid' ] ? null : $cookieid,
+            $post[ 'title' ],
+            $post[ 'content' ],
+            $post[ 'format' ],
+            qa_viewer_text( $post[ 'content' ], $post[ 'format' ] ),
+            isset( $post[ 'tags' ] ) ? $post[ 'tags' ] : '',
+            false, // notify
+            null, // email
+            null, // categoryid - Q2A categories are separate from blog categories
+            null, // extra
+            false, // queued
+            isset( $post[ 'name' ] ) ? $post[ 'name' ] : null
+        );
+
+        if ( !$questionid ) {
+            return false;
+        }
+
+        // Load the newly created question record for use with qa_answer_create / qa_comment_create
+        $question = qa_db_select_with_pending(
+            qa_db_full_post_selectspec( $userid, $questionid )
+        );
+
+        // Convert blog comments into Q2A comments on the question
+        $existingcomments = array(); // tracks created comments for duplicate detection
+
+        foreach ( $commentsfollows as $comment ) {
+            if ( $comment[ 'basetype' ] != 'C' || $comment[ 'hidden' ] ) {
+                continue;
+            }
+
+            $commentid = qa_comment_create(
+                $comment[ 'userid' ],
+                isset( $comment[ 'handle' ] ) ? $comment[ 'handle' ] : null,
+                $comment[ 'userid' ] ? null : $cookieid,
+                $comment[ 'content' ],
+                $comment[ 'format' ],
+                qa_viewer_text( $comment[ 'content' ], $comment[ 'format' ] ),
+                false, // notify
+                null, // email
+                $question, // question
+                $question, // parent (comment is on the question itself)
+                $existingcomments, // existing comments for duplicate check
+                false, // queued
+                isset( $comment[ 'name' ] ) ? $comment[ 'name' ] : null
+            );
+
+            // Add to existing comments so next iteration can check for duplicates
+            if ( $commentid ) {
+                $existingcomments[ $commentid ] = array(
+                    'type'     => 'C',
+                    'parentid' => $question[ 'postid' ],
+                    'content'  => $comment[ 'content' ],
+                );
+            }
+        }
+
+        // Delete the original blog post and its comments after successful conversion
+        qas_blog_post_delete_recursive( $post[ 'postid' ] );
+
+        return $questionid;
+    }
+
+
     /*
         Omit PHP closing tag to help avoid accidental output
     */

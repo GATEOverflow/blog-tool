@@ -19,6 +19,21 @@ img.featured-image {
     padding-right: 18px;
 }
 
+.qa-form-light-button-convert {
+    padding-left: 20px;
+    position: relative;
+}
+
+.qa-form-light-button-convert::before {
+    content: '\21C4';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
 .qa-form-light-button-featured {
     background: url(../images/favorite-icon-15x15.png) no-repeat right center;
     padding-right: 18px;

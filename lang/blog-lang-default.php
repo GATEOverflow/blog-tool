@@ -99,6 +99,10 @@
         'recent_cs_title' 				=> 'Recently commented posts',
 		'favorite_posts_title' 			=> 'Your Favorite Blog Posts',
 		'no_favorite_posts_found' 		=> 'You have not favorited any posts yet.',
+        'convert_to_question_button'    => 'Convert to Question',
+        'convert_to_question_popup'     => 'Convert this blog post and its comments into a Q&A question',
+        'convert_failed'                => 'Failed to convert the blog post to a question. Please try again.',
+        'convert_confirm'               => 'Are you sure you want to convert this blog post to a question? The blog post will be permanently deleted.',
 
     );
 
