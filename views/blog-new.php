@@ -103,6 +103,25 @@
             }
 
             if ( empty( $errors ) ) {
+                // check if the blog post is already posted (duplicate detection)
+                $testTitleWords = implode( ' ', qa_string_to_words( $in[ 'title' ] ) );
+                $testContentWords = implode( ' ', qa_string_to_words( $in[ 'content' ] ) );
+                $recentPosts = qa_db_select_with_pending(
+                    qas_blog_db_blogs_selectspec( null, 'created', 0, null, null, false, true, 5 )
+                );
+
+                foreach ( $recentPosts as $post ) {
+                    $postTitleWords = implode( ' ', qa_string_to_words( $post[ 'title' ] ) );
+                    $postContentWords = implode( ' ', qa_string_to_words( $post[ 'content' ] ) );
+
+                    if ( $postTitleWords == $testTitleWords && $postContentWords == $testContentWords ) {
+                        $errors[ 'page' ] = qa_lang_html( 'question/duplicate_content' );
+                        break;
+                    }
+                }
+            }
+
+            if ( empty( $errors ) ) {
                 $cookieid = isset( $userid ) ? qa_cookie_get() : qa_cookie_get_create(); // create a new cookie if necessary
 
                 $postid = qas_blog_post_create( $userid, qa_get_logged_in_handle(), $cookieid,
