@@ -87,6 +87,19 @@
     }
 
 
+//	Process convert to question button
+
+    if ( qa_clicked( 'blog_doconvert' ) && $post[ 'convertible' ] && qas_blog_page_b_click_check_form_code( $post, $pageerror ) ) {
+        $questionid = qas_blog_convert_to_question( $post, $commentsfollows, $userid, qa_get_logged_in_handle(), $cookieid );
+
+        if ( $questionid ) {
+            qa_redirect( qa_q_request( $questionid, $post[ 'title' ] ) );
+        } else {
+            $pageerror = qa_lang_html( 'qas_blog/convert_failed' );
+        }
+    }
+
+
 //	Process hide, show, delete, flag, unflag, edit or save button for comments
 
     foreach ( $commentsfollows as $commentid => $comment ) {

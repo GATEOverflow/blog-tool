@@ -171,6 +171,9 @@
             !( ( $post[ 'basetype' ] == 'B' ) ? $permiterror_post_q : $permiterror_post_c );
         $rules[ 'followable' ] = false;
 
+        $rules[ 'convertible' ] = ( $post[ 'basetype' ] == 'B' ) && !$post[ 'hidden' ] && !$rules[ 'queued' ]
+            && qa_get_logged_in_level() >= QA_USER_LEVEL_EDITOR; // only allow conversion of blog posts to questions if user has permission to post questions
+
         //	Now make any changes based on the child posts
 
         if ( $rules[ 'closed' ] ) {
@@ -345,6 +348,15 @@
                     'label' => qa_lang_html( 'question/claim_button' ),
                     'popup' => qa_lang_html( 'qas_blog/claim_post_popup' ),
                 );
+
+            if ( $post[ 'convertible' ] ) {
+                $convert_clicksuffix = ' onclick="if (!confirm(' . qa_js( qa_lang( 'qas_blog/convert_confirm' ) ) . ')) return false; qa_show_waiting_after(this, false);"';
+                $buttons[ 'convert' ] = array(
+                    'tags'  => 'name="blog_doconvert"' . $convert_clicksuffix,
+                    'label' => qa_lang_html( 'qas_blog/convert_to_question_button' ),
+                    'popup' => qa_lang_html( 'qas_blog/convert_to_question_popup' ),
+                );
+            }
 
             if ( $post[ 'commentbutton' ] )
                 $buttons[ 'comment' ] = array(

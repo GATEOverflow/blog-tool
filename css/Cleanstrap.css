@@ -65,6 +65,21 @@ img.featured-image {
     padding-left: 18px;
 }
 
+.qa-form-light-button-convert {
+    padding-left: 20px;
+    position: relative;
+}
+
+.qa-form-light-button-convert::before {
+    content: '\21C4';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
 .qa-template-blog .wmd-prompt-dialog {
     background: #f8f8f8;
     border: 5px solid #888;
